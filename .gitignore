@@ -1,0 +1,6 @@
+# compile
+target/
+
+# intellij idea
+.idea/
+CasinoGames.iml
