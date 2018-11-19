@@ -1,10 +1,13 @@
-compile:
-	javac -d target/classes src/main/java/games/Slot.java
-
-run:
-	java -cp target/classes games.Slot
-
 clean:
-	rm -rf target
+	./mvnw clean	
+run:
+	java -jar ./target/games-1.0-SNAPSHOT-jar-with-dependencies.jar
 
-compile-run: compile run
+build-run: build run
+
+build: 
+	./mvnw package
+
+update:
+	./mvnw versions:update-properties
+	./mvnw versions:display-plugin-updates
