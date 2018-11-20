@@ -1,5 +1,3 @@
-.DEFAULT_GOAL := build-run
-
 clean:
 	./mvnw clean	
 run:

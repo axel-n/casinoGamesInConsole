@@ -1,4 +1,8 @@
 # compile
 target/
 
+# intellij idea
+.idea/
+CasinoGames.iml
+
 .mvn/wrapper/maven-wrapper.jar
