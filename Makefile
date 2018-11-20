@@ -11,5 +11,4 @@ build:
 	./mvnw package
 
 update:
-	./mvnw versions:update-properties
-	./mvnw versions:display-plugin-updates
+	./mvnw versions:update-properties versions:display-plugin-updates
