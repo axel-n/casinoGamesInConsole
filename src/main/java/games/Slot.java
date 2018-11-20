@@ -1,5 +1,6 @@
 package games;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import static java.lang.Math.random;
@@ -12,14 +13,15 @@ public class Slot {
         // ставка
         int bet = 10;
         int balance = 100;
-        int prize = 1000;
+        int prize = 1_000;
+        int countDrums = 3;
 
         // максимальное число на барабане
         int size = 6;
 
         // барабаны
-        int counters[] = {0, 0, 0};
-
+        int[] counters = new int[countDrums];
+        
         // чтобы была возможность вычесть ставку
         while ((balance - bet) >= 0) {
 
@@ -28,7 +30,7 @@ public class Slot {
 
             Random random = new Random();
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < countDrums; i++) {
                 counters[i] = (counters[i] + (int) round(random() * 100)) % size;
             }
 
