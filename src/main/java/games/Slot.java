@@ -1,6 +1,5 @@
 package games;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import static java.lang.Math.random;
@@ -21,7 +20,7 @@ public class Slot {
 
         // барабаны
         int[] counters = new int[countDrums];
-        
+
         // чтобы была возможность вычесть ставку
         while ((balance - bet) >= 0) {
 
