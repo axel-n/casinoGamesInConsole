@@ -10,20 +10,18 @@ public class Choice {
         System.out.println("Выберите игру:\n" +
                 "1 - \"однорукий бандит\", 2 - \"пьяница\", 3 - \"очко\"");
         char codeGame = getCharacterFromUser();
-        if (confirm("Вы уверены?")) {
-            switch (codeGame) {
-                case '1':
-                    Slot.main();
-                    break;
-                case '2':
-                    Drunkard.main();
-                    break;
-                case '3':
-                    BlackJack.main();
-                    break;
-                default:
-                    System.out.println("Игры с таким номером нет!");
-            }
+        switch (codeGame) {
+            case '1':
+                Slot.main();
+                break;
+            case '2':
+                Drunkard.main();
+                break;
+            case '3':
+                BlackJack.main();
+                break;
+            default:
+                System.out.println("Игры с таким номером нет!");
         }
     }
 
@@ -35,7 +33,8 @@ public class Choice {
     }
 
     static boolean confirm(String message) throws IOException {
-        System.out.println(message + " да - \"Y/y\", любой другой символ - нет (Что бы выйти из игры, нажмите Ctrl + C)");
+        System.out.println(message + " да - \"Y\", " +
+                "любой другой символ - нет (Что бы выйти из игры, нажмите Ctrl + C)");
         switch (getCharacterFromUser()) {
             case 'Y':
             case 'y':
