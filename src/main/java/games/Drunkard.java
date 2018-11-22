@@ -1,7 +1,5 @@
 package games;
 
-import org.apache.commons.math3.util.MathArrays;
-
 import java.util.Arrays;
 
 import static games.CardUtils.CARDS_TOTAL_COUNT;
@@ -24,7 +22,7 @@ public class Drunkard {
         playersCardTails[0] = CARDS_TOTAL_COUNT / 2;
         playersCardTails[1] = CARDS_TOTAL_COUNT / 2;
 
-        while (!isEnd()) {
+        while (!existWinner()) {
 
             System.out.printf("Итерация №%d ", counter);
             System.out.printf("игрок №1 карта: %s, игрок №2 карта: %s%n", CardUtils.toString(playersCards[0][0]), CardUtils.toString(playersCards[1][0]));
@@ -90,7 +88,7 @@ public class Drunkard {
 
     private static void distributeCards() {
 
-        int deck[] = CardUtils.getShaffledCards();
+        int[] deck = CardUtils.getShaffledCards();
 
         // отмечаем пустые ячейки спец значением
         Arrays.fill(playersCards[0], -1);
@@ -116,12 +114,11 @@ public class Drunkard {
         playersCards[1][playersCardTails[1]] = -1;
     }
 
-    private static boolean isEnd() {
+    private static boolean existWinner() {
 
-        if (playersCardTails[0] > 0 || playersCardTails[1] > 0) {
-            if (playersCardTails[0] == CARDS_TOTAL_COUNT || playersCardTails[1] == CARDS_TOTAL_COUNT) {
-                return true;
-            }
+        if (playersCardTails[0] <= 0 || playersCardTails[1] <= 0) {
+            return true;
+
         }
         return false;
     }
