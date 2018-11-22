@@ -13,7 +13,11 @@
         <!--Project settings-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.release>11</maven.compiler.release>
+
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
 
         <!--Libs-->
         <log4j-slf4j-impl.version>2.11.1</log4j-slf4j-impl.version>
@@ -157,7 +161,7 @@
                             <!-- Checks for Size Violations.                    -->
                             <!-- See http://checkstyle.sf.net/config_sizes.html -->
                             <module name="FileLength">
-                                <property name="max" value="3500" />
+                                <property name="max" value="3500"/>
                                 <property name="fileExtensions" value="java"/>
                             </module>
 
