@@ -4,9 +4,11 @@ import org.apache.commons.math3.util.MathArrays;
 
 import java.util.Arrays;
 
+import static games.CardUtils.CARDS_TOTAL_COUNT;
+import static games.CardUtils.PARS_TOTAL_COUNT;
+
+
 public class Drunkard {
-    private static final int PARS_TOTAL_COUNT = Par.values().length; // 9
-    private static final int CARDS_TOTAL_COUNT = PARS_TOTAL_COUNT * Suit.values().length; // 36
 
     // чтобы можно было скопировать карту свою и игрока2 в конец перед победой
     private static int[][] playersCards = new int[2][CARDS_TOTAL_COUNT + 1];
@@ -22,11 +24,10 @@ public class Drunkard {
         playersCardTails[0] = CARDS_TOTAL_COUNT / 2;
         playersCardTails[1] = CARDS_TOTAL_COUNT / 2;
 
-
         while (!isEnd()) {
 
             System.out.printf("Итерация №%d ", counter);
-            System.out.printf("игрок №1 карта: %s, игрок №2 карта: %s%n", toString(playersCards[0][0]), toString(playersCards[1][0]));
+            System.out.printf("игрок №1 карта: %s, игрок №2 карта: %s%n", CardUtils.toString(playersCards[0][0]), CardUtils.toString(playersCards[1][0]));
 
             int card1 = getIndexSuite(playersCards[0][0]);
             int card2 = getIndexSuite(playersCards[1][0]);
@@ -77,9 +78,7 @@ public class Drunkard {
                     System.out.printf("У игрока №1 %d карт, у игрока №2 %d карт%n", playersCardTails[0], playersCardTails[1]);
                     break;
                 }
-
             }
-
 
             counter++;
 
@@ -87,51 +86,11 @@ public class Drunkard {
 
         System.out.printf("Выиграл %s игрок. Количество произведённых итераций: %d.", getWinner(), counter);
 
-
-    }
-
-    enum Suit {
-        SPADES, // пики
-        HEARTS, // червы
-        CLUBS, // трефы
-        DIAMONDS // бубны
-    }
-
-    enum Par {
-        SIX,
-        SEVEN,
-        EIGHT,
-        NINE,
-        TEN,
-        JACK, // Валет
-        QUEEN, // Дама
-        KING, // Король
-        ACE // Туз
-    }
-
-    private static Par getPar(int cardNumber) {
-        return Par.values()[cardNumber % PARS_TOTAL_COUNT];
-    }
-
-    private static Suit getSuite(int cardNumber) {
-        return Suit.values()[cardNumber / PARS_TOTAL_COUNT];
-    }
-
-    private static String toString(int cardNumber) {
-        return getPar(cardNumber) + " " + getSuite(cardNumber);
     }
 
     private static void distributeCards() {
 
-        int[] deck = new int[CARDS_TOTAL_COUNT];
-
-        // "создаем" колоду
-        for (int i = 0; i < CARDS_TOTAL_COUNT; i++) {
-            deck[i] = i;
-        }
-
-        // перемешиваем колоду
-        MathArrays.shuffle(deck);
+        int deck[] = CardUtils.getShaffledCards();
 
         // отмечаем пустые ячейки спец значением
         Arrays.fill(playersCards[0], -1);
