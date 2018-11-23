@@ -1,51 +1,44 @@
 package games;
 
-import java.util.Random;
-
+import org.slf4j.Logger;
 import static java.lang.Math.random;
 import static java.lang.Math.round;
 
 public class Slot {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(Slot.class);
+    
+    private static final int BET = 10;
+    private static final int PRIZE = 1_000;
+    private static final int COUNT_DRUMS = 3;
+    
+    private static final int MAX_NUMBER_ON_DRUM = 6;
+
+    private static int[] drums = new int[COUNT_DRUMS];
+    private static int balance = 100;
+
     public static void main(String... __) {
 
-        // ставка
-        int bet = 10;
-        int balance = 100;
-        int prize = 1_000;
-        int countDrums = 3;
-
-        // максимальное число на барабане
-        int size = 6;
-
-        // барабаны
-        int[] counters = new int[countDrums];
-
         // чтобы была возможность вычесть ставку
-        while ((balance - bet) >= 0) {
+        while ((balance - BET) >= 0) {
 
-            System.out.println("У Вас " + balance + "$, ставка - " + bet + "$");
-            System.out.println("Крутим барабаны! Розыгрыш принёс следующие результаты:");
+            log.info("У Вас {}$, ставка - {}$", balance, BET);
+            log.info("Крутим барабаны! Розыгрыш принёс следующие результаты:");
 
-            Random random = new Random();
-
-            for (int i = 0; i < countDrums; i++) {
-                counters[i] = (counters[i] + (int) round(random() * 100)) % size;
+            for (int i = 0; i < COUNT_DRUMS; i++) {
+                drums[i] = (drums[i] + (int) round(random() * 100)) % MAX_NUMBER_ON_DRUM;
             }
 
-            System.out.println("первый барабан - " + counters[0] + ", второй - " + counters[1]
-                    + ", третий - " + counters[2]);
+            log.info("первый барабан - {}, второй - {}, третий - {}", drums[0], drums[1], drums[2]);
 
-            if ((counters[0] == counters[1]) && (counters[1] == counters[2])) {
-                System.out.println("Поздравляю! Вы выиграли " + prize + "$!");
-                balance += prize;
+            if ((drums[0] == drums[1]) && (drums[1] == drums[2])) {
+                log.info("Поздравляю! Вы выиграли {}$!", PRIZE);
+                balance += PRIZE;
 
             } else {
-                balance -= bet;
-                System.out.println("Проигрыш  " + bet + "$, ваш капитал теперь составляет: " + balance + "$");
+                balance -= BET;
+                log.info("Проигрыш {}$, ваш капитал теперь составляет: {}$", BET, balance);
             }
         }
-
-
     }
 }

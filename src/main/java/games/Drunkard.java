@@ -1,5 +1,6 @@
 package games;
 
+import org.slf4j.Logger;
 import java.util.Arrays;
 
 import static games.CardUtils.CARDS_TOTAL_COUNT;
@@ -7,6 +8,8 @@ import static games.CardUtils.PARS_TOTAL_COUNT;
 
 
 public class Drunkard {
+
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(Drunkard.class);
 
     // чтобы можно было скопировать карту свою и игрока2 в конец перед победой
     private static int[][] playersCards = new int[2][CARDS_TOTAL_COUNT + 1];
@@ -25,8 +28,9 @@ public class Drunkard {
 
         while (!existWinner()) {
 
-            System.out.printf("Итерация №%d ", counter);
-            System.out.printf("игрок №1 карта: %s, игрок №2 карта: %s%n", CardUtils.toString(playersCards[ID_USER1][0]), CardUtils.toString(playersCards[ID_USER2][0]));
+            log.info("Итерация №{} ", counter);
+            log.info("игрок №1 карта: {}, игрок №2 карта: {}", CardUtils.toString(playersCards[ID_USER1][0]), CardUtils.toString(playersCards[ID_USER2][0]));
+
 
             int card1 = getIndexSuite(playersCards[ID_USER1][0]);
             int card2 = getIndexSuite(playersCards[ID_USER2][0]);
@@ -36,24 +40,23 @@ public class Drunkard {
 
             switch (winner) {
                 case 0: {
-                    System.out.printf("Выиграл игрок №1!%n");
+                    log.info("Выиграл игрок №1!");
                     break;
                 }
                 case 1: {
-                    System.out.printf("Выиграл игрок №2!%n");
+                    log.info("Выиграл игрок №2!");
                     break;
                 }
                 case 2: {
-                    System.out.printf("Спор - каждый остаётся при своих!%n");
+                    log.info("Спор - каждый остаётся при своих!");
                     break;
-                }            }
-
-            System.out.printf("У игрока №1 %d карт, у игрока №2 %d карт%n", playersCardTails[ID_USER1], playersCardTails[ID_USER2]);
+                }
+            }
+            log.info("У игрока №1 {} карт, у игрока №2 {} карт", playersCardTails[ID_USER1], playersCardTails[ID_USER2]);
 
             counter++;
         }
-
-        System.out.printf("Выиграл %s игрок. Количество произведённых итераций: %d.", getWinner(), counter);
+        log.info("Выиграл {} игрок. Количество произведённых итераций: {}.", getWinner(), counter);
 
     }
 

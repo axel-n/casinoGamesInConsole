@@ -1,8 +1,12 @@
 package games;
 
+import org.slf4j.Logger;
+
 import java.io.IOException;
 
 public class BlackJack {
+
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(BlackJack.class);
 
     private static int[] commonDeck;
     private static int commonDeckCursor;
@@ -50,8 +54,7 @@ public class BlackJack {
     }
 
     private static void initRound() {
-        System.out.println("\nУ Вас " + playersMoney[ID_USER] + "$, у компьютера - " +
-                playersMoney[ID_AI] + "$. Начинаем новый раунд!");
+        log.info("У Вас {}$, у компьютера {}$. Начинаем новый раунд!", playersMoney[ID_USER], playersMoney[ID_AI]);
         commonDeck = CardUtils.getShaffledCards();
         playersCards = new int[2][MAX_CARDS_COUNT];
         playersCursors = new int[]{0, 0};
@@ -105,7 +108,7 @@ public class BlackJack {
             // по правилами, 2 раза должны давать карту
             for (int j = 0; j < COUNT_CARDS_ON_START; j++) {
                 card = addCard2Player(ID_USER);
-                System.out.printf("Вам выпала карта %s%n", card);
+                log.info("Вам выпала карта {}", card);
             }
 
             for (int j = 0; j < MAX_CARDS_COUNT; j++) {
@@ -116,7 +119,7 @@ public class BlackJack {
                     if (Choice.confirm("Берём ещё?")) {
 
                         card = addCard2Player(ID_USER);
-                        System.out.printf("Вам выпала карта %s%n", card);
+                        log.info("Вам выпала карта {}", card);
 
                     } else {
                         // Пользователь не хочет больше брать
@@ -127,9 +130,10 @@ public class BlackJack {
 
             // ход компьютера
             // по правилами, 2 раза должны давать карту
+            // можно конечно объединить раздачу карт, но правила hexlet требуют такой порядок действий
             for (int j = 0; j < COUNT_CARDS_ON_START; j++) {
                 card = addCard2Player(ID_AI);
-                System.out.printf("Компьютеру выпала карта %s%n", card);
+                log.info("Компьютеру выпала карта {}", card);
             }
 
             for (int j = 0; j < MAX_CARDS_COUNT; j++) {
@@ -139,7 +143,7 @@ public class BlackJack {
                 if (sum <= MAX_VALUE_FOR_AI) {
 
                     card = addCard2Player(ID_AI);
-                    System.out.printf("Компьютер решил взять ещё и ему выпала карта %s%n", card);
+                    log.info("Компьютер решил взять ещё и ему выпала карта {}", card);
                 }
             }
 
@@ -147,24 +151,24 @@ public class BlackJack {
             int sum1 = getFinalSum(ID_USER);
             int sum2 = getFinalSum(ID_AI);
 
-            System.out.printf("Сумма ваших очков - %d, компьютера - %d%n", sum1, sum2);
+            log.info("Сумма ваших очков - {}, компьютера - {}", sum1, sum2);
 
             if (sum1 > sum2) {
-                System.out.printf("Вы выиграли раунд! Получаете %d$%n", BET);
+                log.info("Вы выиграли раунд! Получаете {}$", BET);
                 playersMoney[ID_USER] += BET;
                 playersMoney[ID_AI] -= BET;
             } else if (sum1 == sum2) {
-                System.out.printf("Ничья! Все остаются при своих%n");
+                log.info("Ничья! Все остаются при своих");
             } else {
-                System.out.printf("Вы проиграли раунд! Теряете %d$%n", BET);
+                log.info("Вы проиграли раунд! Теряете {}$", BET);
                 playersMoney[ID_USER] -= BET;
                 playersMoney[ID_AI] += BET;
             }
         }
 
         if (playersMoney[ID_USER] > 0)
-            System.out.println("Вы выиграли! Поздравляем!");
+            log.info("Вы выиграли! Поздравляем!");
         else
-            System.out.println("Вы проиграли. Соболезнуем...");
+            log.info("Вы проиграли. Соболезнуем...");
     }
 }
