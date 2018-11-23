@@ -99,7 +99,6 @@ public class BlackJack {
 
     public static void main(String... __) throws IOException {
 
-
         while (!existWinner()) {
 
             initRound();
@@ -111,21 +110,14 @@ public class BlackJack {
                 log.info("Вам выпала карта {}", card);
             }
 
-            for (int j = 0; j < MAX_CARDS_COUNT; j++) {
-                int sum = sumPointsPlayer(ID_USER);
+            int sum = 0;
 
-                if (sum <= MAX_VALUE) {
+            for (int j = 0; j < MAX_CARDS_COUNT && sum <= MAX_VALUE && Choice.confirm("Берём ещё?"); j++) {
 
-                    if (Choice.confirm("Берём ещё?")) {
+                sum = sumPointsPlayer(ID_USER);
 
-                        card = addCard2Player(ID_USER);
-                        log.info("Вам выпала карта {}", card);
-
-                    } else {
-                        // Пользователь не хочет больше брать
-                        break;
-                    }
-                }
+                card = addCard2Player(ID_USER);
+                log.info("Вам выпала карта {}", card);
             }
 
             // ход компьютера
@@ -136,15 +128,14 @@ public class BlackJack {
                 log.info("Компьютеру выпала карта {}", card);
             }
 
-            for (int j = 0; j < MAX_CARDS_COUNT; j++) {
+            sum = 0;
+            for (int j = 0; j < MAX_CARDS_COUNT && sum <= MAX_VALUE_FOR_AI; j++) {
 
-                int sum = sumPointsPlayer(ID_AI);
+                sum = sumPointsPlayer(ID_AI);
 
-                if (sum <= MAX_VALUE_FOR_AI) {
+                card = addCard2Player(ID_AI);
+                log.info("Компьютер решил взять ещё и ему выпала карта {}", card);
 
-                    card = addCard2Player(ID_AI);
-                    log.info("Компьютер решил взять ещё и ему выпала карта {}", card);
-                }
             }
 
             // считаем итог
