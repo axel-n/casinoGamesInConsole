@@ -2,7 +2,7 @@ package games;
 
 import org.apache.commons.math3.util.MathArrays;
 
-public class CardUtils {
+class CardUtils {
 
     static final int PARS_TOTAL_COUNT = Par.values().length; // 9
     static final int CARDS_TOTAL_COUNT = PARS_TOTAL_COUNT * Suit.values().length; // 36
@@ -30,7 +30,7 @@ public class CardUtils {
         return Par.values()[cardNumber % PARS_TOTAL_COUNT];
     }
 
-    static Suit getSuite(int cardNumber) {
+    private static Suit getSuite(int cardNumber) {
         return Suit.values()[cardNumber / PARS_TOTAL_COUNT];
     }
 

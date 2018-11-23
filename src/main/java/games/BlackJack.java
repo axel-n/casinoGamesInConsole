@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 
-public class BlackJack {
+class BlackJack {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(BlackJack.class);
 
@@ -25,9 +25,6 @@ public class BlackJack {
 
     private static final int COUNT_CARDS_ON_START = 2;
     private static final int BET = 10;
-
-    // для получения временных результов с картой
-    private static String card;
 
     private static int value(int card) {
         switch (CardUtils.getPar(card)) {
@@ -73,7 +70,7 @@ public class BlackJack {
         return CardUtils.toString(indexCard);
     }
 
-    static int sumPointsPlayer(int player) {
+    private static int sumPointsPlayer(int player) {
 
         int sum = 0;
 
@@ -87,17 +84,17 @@ public class BlackJack {
 
     // получение суммы игрока, если она валидная
     // 0, если превысили порог MAX_VALUE
-    static int getFinalSum(int player) {
+    private static int getFinalSum(int player) {
         int sum = sumPointsPlayer(player);
 
         return sum <= MAX_VALUE ? sum : 0;
     }
 
-    static boolean existWinner() {
+    private static boolean existWinner() {
         return ((playersMoney[ID_AI] - BET) < 0) || ((playersMoney[ID_USER] - BET) < 0);
     }
 
-    public static void main(String... __) throws IOException {
+    static void main() throws IOException {
 
         while (!existWinner()) {
 
@@ -105,6 +102,8 @@ public class BlackJack {
 
             // ход человека
             // по правилами, 2 раза должны давать карту
+            // для получения временных результов с картой
+            String card;
             for (int j = 0; j < COUNT_CARDS_ON_START; j++) {
                 card = addCard2Player(ID_USER);
                 log.info("Вам выпала карта {}", card);

@@ -1,13 +1,14 @@
 package games;
 
 import org.slf4j.Logger;
+
 import java.util.Arrays;
 
 import static games.CardUtils.CARDS_TOTAL_COUNT;
 import static games.CardUtils.PARS_TOTAL_COUNT;
 
 
-public class Drunkard {
+class Drunkard {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(Drunkard.class);
 
@@ -18,7 +19,7 @@ public class Drunkard {
     private static final int ID_USER1 = 0;
     private static final int ID_USER2 = 1;
 
-    public static void main(String... __) {
+    static void main() {
         int counter = 1;
 
         distributeCards();
@@ -39,18 +40,17 @@ public class Drunkard {
             processingDecks(winner);
 
             switch (winner) {
-                case 0: {
+                case 0:
                     log.info("Выиграл игрок №1!");
                     break;
-                }
-                case 1: {
+                case 1:
                     log.info("Выиграл игрок №2!");
                     break;
-                }
-                case 2: {
+                case 2:
                     log.info("Спор - каждый остаётся при своих!");
                     break;
-                }
+                default:
+                    break;
             }
             log.info("У игрока №1 {} карт, у игрока №2 {} карт", playersCardTails[ID_USER1], playersCardTails[ID_USER2]);
 
@@ -63,7 +63,7 @@ public class Drunkard {
     private static void processingDecks(int winner) {
 
         switch (winner) {
-            case 0: {
+            case 0:
                 playersCards[ID_USER1][playersCardTails[ID_USER1]] = playersCards[ID_USER1][0];
                 playersCards[ID_USER1][playersCardTails[ID_USER1] + 1] = playersCards[ID_USER2][0];
 
@@ -72,9 +72,8 @@ public class Drunkard {
 
                 moveCards1left();
                 break;
-            }
 
-            case 1: {
+            case 1:
                 playersCards[ID_USER2][playersCardTails[ID_USER2]] = playersCards[ID_USER2][0];
                 playersCards[ID_USER2][playersCardTails[ID_USER2] + 1] = playersCards[ID_USER1][0];
 
@@ -83,16 +82,16 @@ public class Drunkard {
 
                 moveCards1left();
                 break;
-            }
-
-            case 2: {
+            case 2:
                 // спор
                 playersCards[ID_USER1][playersCardTails[ID_USER1]] = playersCards[ID_USER1][0];
                 playersCards[ID_USER2][playersCardTails[ID_USER2]] = playersCards[ID_USER2][0];
 
                 moveCards1left();
                 break;
-            }
+
+            default:
+                break;
         }
     }
 
@@ -115,7 +114,7 @@ public class Drunkard {
         return cardNumber % PARS_TOTAL_COUNT;
     }
 
-    public static void moveCards1left() {
+    private static void moveCards1left() {
 
         System.arraycopy(playersCards[ID_USER1], 1, playersCards[ID_USER1], 0, playersCardTails[ID_USER1]);
         System.arraycopy(playersCards[ID_USER2], 1, playersCards[ID_USER2], 0, playersCardTails[ID_USER2]);

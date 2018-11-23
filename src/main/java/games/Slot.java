@@ -1,13 +1,13 @@
 package games;
 
 import org.slf4j.Logger;
-import static java.lang.Math.random;
-import static java.lang.Math.round;
 
-public class Slot {
+import java.util.Random;
+
+class Slot {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(Slot.class);
-    
+
     private static final int BET = 10;
     private static final int PRIZE = 1_000;
     private static final int COUNT_DRUMS = 3;
@@ -17,7 +17,7 @@ public class Slot {
     private static int[] drums = new int[COUNT_DRUMS];
     private static int balance = 100;
 
-    public static void main(String... __) {
+    static void main() {
 
         // чтобы была возможность вычесть ставку
         while ((balance - BET) >= 0) {
@@ -26,7 +26,8 @@ public class Slot {
             log.info("Крутим барабаны! Розыгрыш принёс следующие результаты:");
 
             for (int i = 0; i < COUNT_DRUMS; i++) {
-                drums[i] = (drums[i] + (int) round(random() * 100)) % MAX_NUMBER_ON_DRUM;
+                Random random = new Random();
+                drums[i] = (drums[i] + random.nextInt() * 100) % MAX_NUMBER_ON_DRUM;
             }
 
             log.info("первый барабан - {}, второй - {}, третий - {}", drums[0], drums[1], drums[2]);
