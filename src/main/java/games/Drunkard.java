@@ -12,120 +12,123 @@ public class Drunkard {
     private static int[][] playersCards = new int[2][CARDS_TOTAL_COUNT + 1];
     private static int[] playersCardTails = new int[2];
 
-    // не двигаем карты по колоде, постоянно смотрим 1 элемент
+    private static final int ID_USER1 = 0;
+    private static final int ID_USER2 = 1;
+
     public static void main(String... __) {
         int counter = 1;
 
-        // раздаем карты
         distributeCards();
 
-        playersCardTails[0] = CARDS_TOTAL_COUNT / 2;
-        playersCardTails[1] = CARDS_TOTAL_COUNT / 2;
+        playersCardTails[ID_USER1] = CARDS_TOTAL_COUNT / 2;
+        playersCardTails[ID_USER2] = CARDS_TOTAL_COUNT / 2;
 
         while (!existWinner()) {
 
             System.out.printf("Итерация №%d ", counter);
-            System.out.printf("игрок №1 карта: %s, игрок №2 карта: %s%n", CardUtils.toString(playersCards[0][0]), CardUtils.toString(playersCards[1][0]));
+            System.out.printf("игрок №1 карта: %s, игрок №2 карта: %s%n", CardUtils.toString(playersCards[ID_USER1][0]), CardUtils.toString(playersCards[ID_USER2][0]));
 
-            int card1 = getIndexSuite(playersCards[0][0]);
-            int card2 = getIndexSuite(playersCards[1][0]);
+            int card1 = getIndexSuite(playersCards[ID_USER1][0]);
+            int card2 = getIndexSuite(playersCards[ID_USER2][0]);
 
             int winner = checkCards(card1, card2);
+            processingDecks(winner);
 
             switch (winner) {
                 case 0: {
                     System.out.printf("Выиграл игрок №1!%n");
-
-                    playersCards[0][playersCardTails[0]] = playersCards[0][0];
-                    playersCards[0][playersCardTails[0] + 1] = playersCards[1][0];
-
-                    playersCardTails[0]++;
-                    playersCardTails[1]--;
-
-                    moveCards();
-
-                    System.out.printf("У игрока №1 %d карт, у игрока №2 %d карт%n", playersCardTails[0], playersCardTails[1]);
                     break;
                 }
-
-
                 case 1: {
                     System.out.printf("Выиграл игрок №2!%n");
-
-                    playersCards[1][playersCardTails[1]] = playersCards[1][0];
-                    playersCards[1][playersCardTails[1] + 1] = playersCards[0][0];
-
-                    playersCardTails[0]--;
-                    playersCardTails[1]++;
-
-                    moveCards();
-
-                    System.out.printf("У игрока №1 %d карт, у игрока №2 %d карт%n", playersCardTails[0], playersCardTails[1]);
                     break;
                 }
-
-
                 case 2: {
                     System.out.printf("Спор - каждый остаётся при своих!%n");
-
-                    playersCards[0][playersCardTails[0]] = playersCards[0][0];
-                    playersCards[1][playersCardTails[1]] = playersCards[1][0];
-
-                    moveCards();
-
-                    System.out.printf("У игрока №1 %d карт, у игрока №2 %d карт%n", playersCardTails[0], playersCardTails[1]);
                     break;
-                }
-            }
+                }            }
+
+            System.out.printf("У игрока №1 %d карт, у игрока №2 %d карт%n", playersCardTails[ID_USER1], playersCardTails[ID_USER2]);
 
             counter++;
-
         }
 
         System.out.printf("Выиграл %s игрок. Количество произведённых итераций: %d.", getWinner(), counter);
 
     }
 
+    private static void processingDecks(int winner) {
+
+        switch (winner) {
+            case 0: {
+                playersCards[ID_USER1][playersCardTails[ID_USER1]] = playersCards[ID_USER1][0];
+                playersCards[ID_USER1][playersCardTails[ID_USER1] + 1] = playersCards[ID_USER2][0];
+
+                playersCardTails[ID_USER1]++;
+                playersCardTails[ID_USER2]--;
+
+                moveCards1left();
+                break;
+            }
+
+            case 1: {
+                playersCards[ID_USER2][playersCardTails[ID_USER2]] = playersCards[ID_USER2][0];
+                playersCards[ID_USER2][playersCardTails[ID_USER2] + 1] = playersCards[ID_USER1][0];
+
+                playersCardTails[ID_USER1]--;
+                playersCardTails[ID_USER2]++;
+
+                moveCards1left();
+                break;
+            }
+
+            case 2: {
+                // спор
+                playersCards[ID_USER1][playersCardTails[ID_USER1]] = playersCards[ID_USER1][0];
+                playersCards[ID_USER2][playersCardTails[ID_USER2]] = playersCards[ID_USER2][0];
+
+                moveCards1left();
+                break;
+            }
+        }
+    }
+
+    private static void markFieldsSpecialValue() {
+        Arrays.fill(playersCards[ID_USER1], -1);
+        Arrays.fill(playersCards[ID_USER2], -1);
+    }
+
     private static void distributeCards() {
 
         int[] deck = CardUtils.getShaffledCards();
 
-        // отмечаем пустые ячейки спец значением
-        Arrays.fill(playersCards[0], -1);
-        Arrays.fill(playersCards[1], -1);
+        markFieldsSpecialValue();
 
-        System.arraycopy(deck, 0, playersCards[0], 0, CARDS_TOTAL_COUNT / 2);
-        System.arraycopy(deck, CARDS_TOTAL_COUNT / 2, playersCards[1], 0, CARDS_TOTAL_COUNT / 2);
+        System.arraycopy(deck, 0, playersCards[ID_USER1], 0, CARDS_TOTAL_COUNT / 2);
+        System.arraycopy(deck, CARDS_TOTAL_COUNT / 2, playersCards[ID_USER2], 0, CARDS_TOTAL_COUNT / 2);
     }
 
     private static int getIndexSuite(int cardNumber) {
         return cardNumber % PARS_TOTAL_COUNT;
-
-        // return Suit.values()[cardNumber % PARS_TOTAL_COUNT];
     }
 
-    // двигаем карты на 1 элемент влево
-    public static void moveCards() {
+    public static void moveCards1left() {
 
-        System.arraycopy(playersCards[0], 1, playersCards[0], 0, playersCardTails[0]);
-        System.arraycopy(playersCards[1], 1, playersCards[1], 0, playersCardTails[1]);
+        System.arraycopy(playersCards[ID_USER1], 1, playersCards[ID_USER1], 0, playersCardTails[ID_USER1]);
+        System.arraycopy(playersCards[ID_USER2], 1, playersCards[ID_USER2], 0, playersCardTails[ID_USER2]);
 
-        playersCards[0][playersCardTails[0]] = -1;
-        playersCards[1][playersCardTails[1]] = -1;
+        playersCards[ID_USER1][playersCardTails[ID_USER1]] = -1;
+        playersCards[ID_USER2][playersCardTails[ID_USER2]] = -1;
     }
 
     private static boolean existWinner() {
 
-        if (playersCardTails[0] <= 0 || playersCardTails[1] <= 0) {
-            return true;
-
-        }
-        return false;
+        return playersCardTails[ID_USER1] <= 0 || playersCardTails[ID_USER2] <= 0;
     }
 
     private static String getWinner() {
 
-        return playersCardTails[0] == CARDS_TOTAL_COUNT ? "первый" : "второй";
+        return playersCardTails[ID_USER1] == CARDS_TOTAL_COUNT ? "первый" : "второй";
     }
 
     // узнаем чья карта старше без учета масти

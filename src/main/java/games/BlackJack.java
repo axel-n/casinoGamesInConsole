@@ -4,11 +4,11 @@ import java.io.IOException;
 
 public class BlackJack {
 
-    private static int[] cards; // Основная колода
-    private static int cursor; // Счётчик карт основной колоды
+    private static int[] commonDeck;
+    private static int commonDeckCursor;
 
-    private static int[][] playersCards; // карты игроков. Первый индекс - номер игрока
-    private static int[] playersCursors; // курсоры карт игроков. Индекс - номер игрока
+    private static int[][] playersCards;
+    private static int[] playersCursors;
 
     private static int[] playersMoney = {100, 100};
 
@@ -50,28 +50,27 @@ public class BlackJack {
     }
 
     private static void initRound() {
-        System.out.println("\nУ Вас " + playersMoney[0] + "$, у компьютера - " +
-                playersMoney[1] + "$. Начинаем новый раунд!");
-        cards = CardUtils.getShaffledCards();
+        System.out.println("\nУ Вас " + playersMoney[ID_USER] + "$, у компьютера - " +
+                playersMoney[ID_AI] + "$. Начинаем новый раунд!");
+        commonDeck = CardUtils.getShaffledCards();
         playersCards = new int[2][MAX_CARDS_COUNT];
         playersCursors = new int[]{0, 0};
-        cursor = 0;
+        commonDeckCursor = 0;
     }
 
     private static String addCard2Player(int player) {
 
-        int indexCard = cards[cursor];
+        int indexCard = commonDeck[commonDeckCursor];
 
         playersCards[player][playersCursors[player]] = indexCard;
 
         playersCursors[player]++;
-        cursor++;
+        commonDeckCursor++;
 
         return CardUtils.toString(indexCard);
     }
 
-    // метод, который будет суммировать очки игрока
-    static int sum(int player) {
+    static int sumPointsPlayer(int player) {
 
         int sum = 0;
 
@@ -86,20 +85,13 @@ public class BlackJack {
     // получение суммы игрока, если она валидная
     // 0, если превысили порог MAX_VALUE
     static int getFinalSum(int player) {
-        int sum = sum(player);
+        int sum = sumPointsPlayer(player);
 
         return sum <= MAX_VALUE ? sum : 0;
     }
 
     static boolean existWinner() {
-
-        // если могут сделать ставку
-        if (((playersMoney[ID_AI] - BET) >= 0) && ((playersMoney[ID_USER] - BET) >= 0)) {
-            return false;
-        } else {
-            return true;
-        }
-
+        return ((playersMoney[ID_AI] - BET) < 0) || ((playersMoney[ID_USER] - BET) < 0);
     }
 
     public static void main(String... __) throws IOException {
@@ -117,15 +109,14 @@ public class BlackJack {
             }
 
             for (int j = 0; j < MAX_CARDS_COUNT; j++) {
-                int sum = sum(ID_USER);
+                int sum = sumPointsPlayer(ID_USER);
 
                 if (sum <= MAX_VALUE) {
 
                     if (Choice.confirm("Берём ещё?")) {
 
-                        String card = addCard2Player(ID_USER);
+                        card = addCard2Player(ID_USER);
                         System.out.printf("Вам выпала карта %s%n", card);
-                        continue;
 
                     } else {
                         // Пользователь не хочет больше брать
@@ -143,14 +134,12 @@ public class BlackJack {
 
             for (int j = 0; j < MAX_CARDS_COUNT; j++) {
 
-                int sum = sum(ID_AI);
+                int sum = sumPointsPlayer(ID_AI);
 
                 if (sum <= MAX_VALUE_FOR_AI) {
 
-                    String card = addCard2Player(ID_AI);
+                    card = addCard2Player(ID_AI);
                     System.out.printf("Компьютер решил взять ещё и ему выпала карта %s%n", card);
-                    continue;
-
                 }
             }
 
