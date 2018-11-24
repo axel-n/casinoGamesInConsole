@@ -58,7 +58,7 @@ class BlackJack {
         commonDeckCursor = 0;
     }
 
-    private static String addCard2Player(int player) {
+    private static int addCard2Player(int player) {
 
         int indexCard = commonDeck[commonDeckCursor];
 
@@ -67,7 +67,7 @@ class BlackJack {
         playersCursors[player]++;
         commonDeckCursor++;
 
-        return CardUtils.toString(indexCard);
+        return indexCard;
     }
 
     private static int sumPointsPlayer(int player) {
@@ -103,20 +103,19 @@ class BlackJack {
             // ход человека
             // по правилами, 2 раза должны давать карту
             // для получения временных результов с картой
-            String card;
+            int card;
             for (int j = 0; j < COUNT_CARDS_ON_START; j++) {
                 card = addCard2Player(ID_USER);
-                log.info("Вам выпала карта {}", card);
+                log.info("Вам выпала карта {}", CardUtils.toString(card));
             }
 
-            int sum = 0;
+            int sum = sumPointsPlayer(ID_USER);
 
             for (int j = 0; j < MAX_CARDS_COUNT && sum <= MAX_VALUE && Choice.confirm("Берём ещё?"); j++) {
 
-                sum = sumPointsPlayer(ID_USER);
-
                 card = addCard2Player(ID_USER);
-                log.info("Вам выпала карта {}", card);
+                sum += value(card);
+                log.info("Вам выпала карта {}", CardUtils.toString(card));
             }
 
             // ход компьютера
@@ -124,17 +123,16 @@ class BlackJack {
             // можно конечно объединить раздачу карт, но правила hexlet требуют такой порядок действий
             for (int j = 0; j < COUNT_CARDS_ON_START; j++) {
                 card = addCard2Player(ID_AI);
-                log.info("Компьютеру выпала карта {}", card);
+                log.info("Компьютеру выпала карта {}", CardUtils.toString(card));
             }
 
-            sum = 0;
+            sum = sumPointsPlayer(ID_AI);
+
             for (int j = 0; j < MAX_CARDS_COUNT && sum <= MAX_VALUE_FOR_AI; j++) {
 
-                sum = sumPointsPlayer(ID_AI);
-
                 card = addCard2Player(ID_AI);
-                log.info("Компьютер решил взять ещё и ему выпала карта {}", card);
-
+                sum += value(card);
+                log.info("Компьютер решил взять ещё и ему выпала карта {}", CardUtils.toString(card));
             }
 
             // считаем итог
