@@ -17,6 +17,7 @@ class BlackJack {
     private static int[] playersMoney = {100, 100};
 
     private static final int MAX_VALUE = 21;
+    private static final int MIN_VALUE_FOR_HUMAN = 11;
     private static final int MAX_VALUE_FOR_AI = 16;
     private static final int MAX_CARDS_COUNT = 8;
 
@@ -141,7 +142,13 @@ class BlackJack {
     private static void stepHuman() throws IOException {
         int card, sum = 0;
 
-        addCard2Player(ID_USER);
+        card = addCard2Player(ID_USER);
+        sum += value(card);
+
+        if (sum <= MIN_VALUE_FOR_HUMAN) {
+            addCard2Player(ID_USER);
+            sum += value(card);
+        }
 
         while (sum < MAX_VALUE && Choice.confirm("Берём ещё?")) {
 
