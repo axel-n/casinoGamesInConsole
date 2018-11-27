@@ -23,7 +23,6 @@ class BlackJack {
     private static final int ID_USER = 0;
     private static final int ID_AI = 1;
 
-    private static final int COUNT_CARDS_ON_START = 2;
     private static final int BET = 10;
 
     private static int value(int card) {
@@ -67,6 +66,14 @@ class BlackJack {
         playersCursors[player]++;
         commonDeckCursor++;
 
+        String text;
+        if (player == ID_USER)
+            text = "Вам выпала карта";
+        else
+            text = "Компьютер решил взять и ему выпала карта";
+
+        log.info("{} {}", text, CardUtils.toString(indexCard));
+
         return indexCard;
     }
 
@@ -75,7 +82,6 @@ class BlackJack {
         int sum = 0;
 
         for (int i = 0; i < playersCursors[player]; i++) {
-
             sum += value(playersCards[player][i]);
         }
 
@@ -113,7 +119,7 @@ class BlackJack {
     }
 
     private static void result() {
-        // считаем итог
+
         int sum1 = getFinalSum(ID_USER);
         int sum2 = getFinalSum(ID_AI);
 
@@ -133,40 +139,26 @@ class BlackJack {
     }
 
     private static void stepHuman() throws IOException {
-        int card, sum;
-        // по правилами, 2 раза должны давать карту
-        // для получения временных результов с картой
-        for (int j = 0; j < COUNT_CARDS_ON_START; j++) {
-            card = addCard2Player(ID_USER);
-            log.info("Вам выпала карта {}", CardUtils.toString(card));
-        }
+        int card, sum = 0;
 
-        sum = sumPointsPlayer(ID_USER);
+        addCard2Player(ID_USER);
 
-        for (int j = 0; j < MAX_CARDS_COUNT && sum <= MAX_VALUE && Choice.confirm("Берём ещё?"); j++) {
+        while (sum < MAX_VALUE && Choice.confirm("Берём ещё?")) {
 
             card = addCard2Player(ID_USER);
             sum += value(card);
-            log.info("Вам выпала карта {}", CardUtils.toString(card));
         }
     }
 
     private static void stepAI() {
-        int card, sum;
-        // по правилами, 2 раза должны давать карту
-        // можно конечно объединить раздачу карт, но правила hexlet требуют такой порядок действий
-        for (int j = 0; j < COUNT_CARDS_ON_START; j++) {
-            card = addCard2Player(ID_AI);
-            log.info("Компьютеру выпала карта {}", CardUtils.toString(card));
-        }
+        int card, sum = 0;
 
-        sum = sumPointsPlayer(ID_AI);
+        addCard2Player(ID_AI);
 
-        for (int j = 0; j < MAX_CARDS_COUNT && sum <= MAX_VALUE_FOR_AI; j++) {
+        while (sum < MAX_VALUE_FOR_AI) {
 
             card = addCard2Player(ID_AI);
             sum += value(card);
-            log.info("Компьютер решил взять ещё и ему выпала карта {}", CardUtils.toString(card));
         }
     }
 }
