@@ -3,7 +3,6 @@ package games;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 class BlackJack {
 
@@ -63,7 +62,6 @@ class BlackJack {
 
         int card = commonDeck[commonDeckCursor];
 
-
         playersCards[player][playersCursors[player]] = card;
         playersCursors[player]++;
         commonDeckCursor++;
@@ -76,7 +74,7 @@ class BlackJack {
 
         log.info("{} {}", text, CardUtils.toString(card));
 
-        return card;
+        return getFinalSum(player);
     }
 
     private static int sumPointsPlayer(int player) {
@@ -108,17 +106,30 @@ class BlackJack {
 
             initRound();
 
-            stepHuman();
-            stepAI();
+            int sum;
+
+            do
+                sum = addCard2Player(ID_USER);
+            while (sum != 0
+                    && (sum < MIN_VALUE_FOR_HUMAN
+                    || (sum < MAX_VALUE
+                    && Choice.confirm("Берёте ещё?"))));
+
+            do
+                sum = addCard2Player(ID_AI);
+            while (sum != 0 && sum < MAX_VALUE_FOR_AI);
 
             result();
         }
 
-        if (playersMoney[ID_USER] > 0)
-            log.info("Вы выиграли! Поздравляем!");
-        else
-            log.info("Вы проиграли. Соболезнуем...");
+        String final_text = playersMoney[ID_USER] > 0 ?
+                "Вы выиграли! Поздравляем!"
+                : "Вы проиграли. Соболезнуем...";
+        log.info(final_text);
+
+
     }
+
 
     private static void result() {
 
