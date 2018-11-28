@@ -130,7 +130,6 @@ class BlackJack {
 
     }
 
-
     private static void result() {
 
         int sum1 = getFinalSum(ID_USER);
@@ -148,36 +147,6 @@ class BlackJack {
             log.info("Вы проиграли раунд! Теряете {}$", BET);
             playersMoney[ID_USER] -= BET;
             playersMoney[ID_AI] += BET;
-        }
-    }
-
-    private static void stepHuman() throws IOException {
-        int card, sum = 0;
-
-        card = addCard2Player(ID_USER);
-        sum += value(card);
-
-        if (sum <= MIN_VALUE_FOR_HUMAN) {
-            card = addCard2Player(ID_USER);
-            sum += value(card);
-        }
-
-        while (sum < MAX_VALUE && Choice.confirm("Берём ещё?")) {
-            card = addCard2Player(ID_USER);
-            sum += value(card);
-        }
-    }
-
-    private static void stepAI() {
-        int card, sum = 0;
-
-        card = addCard2Player(ID_AI);
-        sum += value(card);
-
-        while (sum < MAX_VALUE_FOR_AI) {
-
-            card = addCard2Player(ID_AI);
-            sum += value(card);
         }
     }
 }
