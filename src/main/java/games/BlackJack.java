@@ -3,6 +3,7 @@ package games;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 class BlackJack {
 
@@ -16,7 +17,7 @@ class BlackJack {
 
     private static int[] playersMoney = {100, 100};
 
-    private static final int MAX_VALUE = 21;
+    private static final int MAX_VALUE = 20;
     private static final int MIN_VALUE_FOR_HUMAN = 11;
     private static final int MAX_VALUE_FOR_AI = 16;
     private static final int MAX_CARDS_COUNT = 8;
@@ -60,10 +61,10 @@ class BlackJack {
 
     private static int addCard2Player(int player) {
 
-        int indexCard = commonDeck[commonDeckCursor];
+        int card = commonDeck[commonDeckCursor];
 
-        playersCards[player][playersCursors[player]] = indexCard;
 
+        playersCards[player][playersCursors[player]] = card;
         playersCursors[player]++;
         commonDeckCursor++;
 
@@ -73,9 +74,9 @@ class BlackJack {
         else
             text = "Компьютер решил взять и ему выпала карта";
 
-        log.info("{} {}", text, CardUtils.toString(indexCard));
+        log.info("{} {}", text, CardUtils.toString(card));
 
-        return indexCard;
+        return card;
     }
 
     private static int sumPointsPlayer(int player) {
@@ -146,12 +147,11 @@ class BlackJack {
         sum += value(card);
 
         if (sum <= MIN_VALUE_FOR_HUMAN) {
-            addCard2Player(ID_USER);
+            card = addCard2Player(ID_USER);
             sum += value(card);
         }
 
         while (sum < MAX_VALUE && Choice.confirm("Берём ещё?")) {
-
             card = addCard2Player(ID_USER);
             sum += value(card);
         }
@@ -160,7 +160,8 @@ class BlackJack {
     private static void stepAI() {
         int card, sum = 0;
 
-        addCard2Player(ID_AI);
+        card = addCard2Player(ID_AI);
+        sum += value(card);
 
         while (sum < MAX_VALUE_FOR_AI) {
 
