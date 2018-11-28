@@ -16,7 +16,8 @@ class BlackJack {
 
     private static int[] playersMoney = {100, 100};
 
-    private static final int MAX_VALUE = 20;
+    private static final int MAX_VALUE = 21;
+    private static final int MAX_VALUE_FOR_HUMAN = 20;
     private static final int MIN_VALUE_FOR_HUMAN = 11;
     private static final int MAX_VALUE_FOR_AI = 16;
     private static final int MAX_CARDS_COUNT = 8;
@@ -108,11 +109,14 @@ class BlackJack {
 
             int sum;
 
-            do
+            do {
                 sum = addCard2Player(ID_USER);
+
+                System.out.println(sum);
+            }
             while (sum != 0
                     && (sum < MIN_VALUE_FOR_HUMAN
-                    || (sum < MAX_VALUE
+                    || (sum < MAX_VALUE_FOR_HUMAN
                     && Choice.confirm("Берёте ещё?"))));
 
             do
